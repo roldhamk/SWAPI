@@ -1,0 +1,12 @@
+<h1>Swapi</h1>
+<ul>
+  {{#each data}}
+  <li>{{@key}} : {{this}}</li>
+  {{/each}}
+</ul>
+
+<form action="/" method="POST">
+  <label for="title">Title: </label>
+  <input type="text" name="title">
+  <input type="submit" value="submit">
+</form>

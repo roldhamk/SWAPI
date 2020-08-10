@@ -4,7 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const app = express();
 
-const swapi = require("./lib/getAPI");
+const adoptSearch = require("./lib/getAPI");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ app.engine(
   ".hbs",
   hbs({
     defaultLayout: "layout",
-    extname: ".hbs"
+    extname: ".hbs",
   })
 );
 
@@ -25,11 +25,11 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-  let title = req.body.title;
-  let data = await swapi.swapi(title);
-  let openingcrawl = data.results[0].opening_crawl;
-
-  res.render("index", { data: { title, openingcrawl } });
+  let search = req.body.search;
+  let data = await adoptSearch.adoptSearch(search);
+  let link = data.hits.hits[0]._source.document;
+  let result = JSON.stringify(data.hits.hits[0]._source.pages[0].Content);
+  res.render("index", { data: { link, result } });
 });
 
 app.use((req, res, next) => {
